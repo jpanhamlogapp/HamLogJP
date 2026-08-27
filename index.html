@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HamLogJP - Mac・iPhone・iPadで使える日本語の交信ログアプリ</title>
+<meta name="description" content="アマチュア無線とフリラー(デジ簡/CB/特小/LCR)の両方に対応した日本語の交信ログアプリ。Mac・iPhone・iPadでネイティブに動作。ログは端末内保存、アカウント不要。">
+<meta property="og:title" content="HamLogJP - 無線交信ログ帳">
+<meta property="og:description" content="Mac・iPhone・iPadで使える日本語の交信ログアプリ。アマチュア無線とフリラーの両対応。">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --teal:#0E7490; --teal-d:#0a5568; --ink:#1E293B; --muted:#5B6B7B;
+    --bg:#F4F7F9; --card:#FFFFFF; --line:#E2E8ED; --accent:#0E7490;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{color:var(--teal);text-decoration:none}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  .btn{display:inline-block;background:var(--teal);color:#fff;font-weight:700;padding:14px 30px;border-radius:12px;font-size:17px;transition:background .15s}
+  .btn:hover{background:var(--teal-d)}
+  .btn.ghost{background:transparent;color:var(--teal);border:2px solid var(--teal)}
+
+  /* Header */
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink)}
+  .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0E7490,#22a3c0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px}
+
+  /* Hero */
+  .hero{padding:64px 0 40px;text-align:center}
+  .hero h1{font-size:38px;line-height:1.35;letter-spacing:-.01em}
+  .hero .lead{font-size:19px;color:var(--muted);margin:18px auto 0;max-width:660px}
+  .cta{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .platforms{margin-top:16px;color:var(--muted);font-size:14px}
+  .hero-shot{margin:44px auto 0;max-width:900px;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(14,116,144,.15)}
+
+  /* Sections */
+  section{padding:56px 0}
+  h2{font-size:27px;text-align:center;letter-spacing:-.01em}
+  .sub{text-align:center;color:var(--muted);margin-top:10px;font-size:16px}
+
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:38px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .card h3{font-size:18px;margin-bottom:8px}
+  .card p{color:var(--muted);font-size:15px}
+  .ic{width:44px;height:44px;border-radius:11px;background:#E6F3F6;color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;font-weight:800}
+
+  /* Showcase */
+  .showcase{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .show-row{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:34px}
+  .show-row:nth-child(even) .txt{order:2}
+  .show-row img{border-radius:14px;box-shadow:0 12px 30px rgba(30,41,59,.12)}
+  .show-row h3{font-size:22px;margin-bottom:12px}
+  .show-row p{color:var(--muted)}
+  @media(max-width:720px){.show-row{grid-template-columns:1fr}.show-row:nth-child(even) .txt{order:0}}
+
+  /* Pricing */
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:720px;margin:38px auto 0}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px}
+  .plan.pro{border:2px solid var(--teal);position:relative}
+  .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px}
+  .plan h3{font-size:20px}
+  .price{font-size:30px;font-weight:800;margin:10px 0}
+  .price small{font-size:15px;color:var(--muted);font-weight:500}
+  .plan ul{list-style:none;margin-top:14px}
+  .plan li{padding:7px 0 7px 26px;position:relative;color:var(--muted);font-size:15px}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+  @media(max-width:640px){.plans{grid-template-columns:1fr}.hero h1{font-size:30px}}
+
+  /* CTA band */
+  .band{background:linear-gradient(135deg,#0E7490,#0a5568);color:#fff;text-align:center}
+  .band h2{color:#fff}
+  .band .sub{color:#cfe8ef}
+  .band .btn{background:#fff;color:var(--teal);margin-top:24px}
+  .band .btn:hover{background:#eef7f9}
+
+  footer{padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
+  footer a{margin:0 10px}
+  .note{font-size:12px;color:#94a3b0;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <div class="brand"><span class="logo">📻</span> HamLogJP</div>
+    <a href="#download" class="btn" style="padding:9px 20px;font-size:15px">ダウンロード</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <h1>Mac・iPhone・iPadで使える<br>日本語の交信ログ</h1>
+    <p class="lead">アマチュア無線とフリラー(デジ簡・CB・特小・LCR)の両方に対応。ログはすべて端末内に保存、アカウント登録も不要です。</p>
+    <div class="cta">
+      <a href="#download" class="btn">App Storeでダウンロード</a>
+      <a href="#features" class="btn ghost">機能を見る</a>
+    </div>
+    <p class="platforms">iPhone ・ iPad ・ Mac 対応　|　無料版あり</p>
+    <div class="hero-shot"><img src="images/mac_3pane.png" alt="HamLogJP Mac版 3ペイン画面"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <h2>こんな方に</h2>
+    <p class="sub">「Macで使える日本語のログソフト」を探していた、すべてのハムとフリラーへ。</p>
+    <div class="features">
+      <div class="card"><div class="ic">📝</div><h3>ワンタップで切替</h3><p>アマチュア無線とフリラーを瞬時に切替。デジ簡82ch・CB 8ch・特小・LCRに対応します。</p></div>
+      <div class="card"><div class="ic">🔎</div><h3>入力を先回り</h3><p>相手コール入力で過去の交信を自動表示。初回か何回目かも判定し、同一バンド/モードの重複も警告します。</p></div>
+      <div class="card"><div class="ic">🗾</div><h3>JCC/JCG内蔵</h3><p>全国の市郡区1,700件超を内蔵。漢字・かな・ローマ字で検索でき、JA1ABC/2 の運用エリアも自動補完。</p></div>
+      <div class="card"><div class="ic">📊</div><h3>統計・グラフ</h3><p>月別・バンド別・モード別に交信を振り返り。運用の傾向がひと目で分かります。</p></div>
+      <div class="card"><div class="ic">📡</div><h3>6m Es 現況</h3><p>PSK Reporterの実データから、いま日本と開けている方向を地図で表示(プレミアム)。</p></div>
+      <div class="card"><div class="ic">🔒</div><h3>データは手元に</h3><p>交信ログは端末内保存で外部送信なし。ADIF入出力でTurbo HAMLOG等との受け渡しも可能(プレミアム)。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<div class="showcase">
+  <div class="wrap">
+    <section style="padding-top:48px">
+      <div class="show-row">
+        <div class="txt">
+          <h3>Macは3ペインで一望</h3>
+          <p>左に機能、中央に交信ログ、右に入力欄。過去の交信を見ながら次のログを打てる、大画面ならではの使い心地です。iPadでも同じ3ペインで動作します。</p>
+        </div>
+        <img src="images/ipad_es.png" alt="iPad 3ペイン画面">
+      </div>
+      <div class="show-row">
+        <div class="txt">
+          <h3>iPhoneは片手で速記</h3>
+          <p>コール欄を最大化し、バンドやモードはタップで選択。交信しながら片手でサッと記録して、そのまま次の交信へ流れます。</p>
+        </div>
+        <img src="images/iphone_login.png" alt="iPhone ログ入力画面" style="max-width:320px;margin:0 auto">
+      </div>
+      <div class="show-row">
+        <div class="txt">
+          <h3>交信を振り返る</h3>
+          <p>月別・バンド別・モード別のグラフで、これまでの運用をまとめて確認。年間の交信数やアクティブなバンドが見えてきます。</p>
+        </div>
+        <img src="images/iphone_stats.png" alt="統計・グラフ画面" style="max-width:320px;margin:0 auto">
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section>
+  <div class="wrap">
+    <h2>料金</h2>
+    <p class="sub">まずは無料で。物足りなくなったらプレミアムへ。</p>
+    <div class="plans">
+      <div class="plan">
+        <h3>無料版</h3>
+        <div class="price">¥0</div>
+        <ul>
+          <li>交信ログ 200件まで保存</li>
+          <li>アマ・フリラーの記録</li>
+          <li>過去交信・重複の自動表示</li>
+          <li>JCC/JCG検索・統計グラフ</li>
+        </ul>
+      </div>
+      <div class="plan pro">
+        <span class="badge">おすすめ</span>
+        <h3>プレミアム</h3>
+        <div class="price">¥480<small> /月</small> ・ ¥4,800<small> /年</small></div>
+        <ul>
+          <li>交信ログ 無制限</li>
+          <li>ADIF入出力・Turbo HAMLOG取り込み</li>
+          <li>QSLカードの発送・受領管理</li>
+          <li>6m Es リアルタイム・宇宙天気</li>
+          <li>iPhone/iPad/Mac 共通で利用</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD BAND -->
+<section class="band" id="download">
+  <div class="wrap">
+    <h2>お空でお会いしましょう。73!</h2>
+    <p class="sub">HamLogJP をダウンロードして、今日の交信から記録を始めましょう。</p>
+    <!-- ↓ App Storeで公開されたら、このhrefにApp StoreのURLを貼ってください -->
+    <a href="https://apps.apple.com/jp/app/hamlogjp-%E7%84%A1%E7%B7%9A%E4%BA%A4%E4%BF%A1%E3%83%AD%E3%82%B0%E5%B8%B3/id6790925699" class="btn">App Storeでダウンロード</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a href="./privacy.html">プライバシーポリシー</a>
+      <a href="mailto:genre_pincers_3d@icloud.com">お問い合わせ</a>
+    </div>
+    <p style="margin-top:12px">© 2026 Yoshikazu Hashimoto (YS801)　HamLogJP - 無線交信ログ帳</p>
+    <p class="note">App Store および Apple ロゴは Apple Inc. の商標です。</p>
+  </div>
+</footer>
+
+</body>
+</html>
